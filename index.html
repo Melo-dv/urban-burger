@@ -5,6 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>URBAN BURGER | Delivery Oficial</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilo do Botão Flutuante do Chat no canto inferior direito */
+        .botao-flutuante-chat {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #E87532;
+            color: #111111;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            cursor: pointer;
+            z-index: 999;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .botao-flutuante-chat:hover {
+            background-color: #F5F1EA;
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 <body>
 
@@ -23,10 +49,15 @@
             <a href="#contato">Contato</a>
         </nav>
         <div class="cabecalho-botoes">
+            <!-- 1. BOTÃO DE LOGIN / CADASTRO -->
             <button id="abrirLoginBtn" class="botao-login">Entrar / Cadastrar</button>
+            
+            <!-- 2. BOTÃO DO CARRINHO -->
             <button id="abrirCarrinhoBtn" class="botao-menu">
                 Carrinho (<span id="contadorCarrinho">0</span>)
             </button>
+
+            <!-- 3. BOTÃO DE HISTÓRICO (Aparece apenas após o login) -->
             <button id="abrirHistoricoBtn" class="botao-historico" style="display: none;">Histórico</button>
         </div>
     </header>
@@ -421,7 +452,7 @@
             <h4>Dados para Entrega</h4>
             
             <input type="text" id="clienteNome" placeholder="Seu nome completo" required>
-            <input type="tel" id="clienteTelefone" placeholder="Seu WhatsApp (Ex: 11 99999-9999)" required>
+            <input type="tel" id="clienteTelefone" placeholder="Seu WhatsApp (64 99330-1938)" required>
             
             <div class="linha-dupla">
                 <input type="text" id="clienteRua" placeholder="Rua / Avenida" required>
@@ -494,13 +525,18 @@
         </div>
     </div>
 
+    <!-- BOTÃO FLUTUANTE DE CHAT (CANTO INFERIOR DIREITO) -->
+    <div id="btnFlutuanteChat" class="botao-flutuante-chat" title="Abrir Atendimento">
+        💬
+    </div>
+
     <!-- ZOOM DA IMAGEM -->
     <div id="overlayZoom" class="overlay-zoom">
         <span id="fecharZoom" class="btn-fechar-zoom">&times;</span>
         <img id="imagemZoom" src="" alt="Zoom do Produto">
     </div>
 
-    <!-- SCRIPT CORRIGIDO COM TYPE="MODULE" PARA SUPORTAR O FIREBASE -->
+    <!-- SCRIPT COM TYPE="MODULE" CORRIGIDO -->
     <script type="module" src="script.js"></script>
 </body>
 </html>

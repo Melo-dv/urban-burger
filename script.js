@@ -98,10 +98,22 @@ function fecharHistorico() {
 
 fecharHistoricoBtn.addEventListener('click', fecharHistorico);
 
+// Se já estiver logado, pergunta se deseja sair. Se não estiver, abre o modal de login.
 abrirLoginBtn.addEventListener('click', () => {
-    mensagemErroLogin.style.display = 'none';
-    modalLogin.classList.add('ativo');
-    overlayLogin.classList.add('ativo');
+    const usuarioLogado = localStorage.getItem('urban_burger_logado');
+    
+    if (usuarioLogado) {
+        const desejaSair = confirm(`Você está conectado como ${usuarioLogado}. Deseja sair da sua conta?`);
+        if (desejaSair) {
+            localStorage.removeItem('urban_burger_logado');
+            verificarEstadoLogin();
+            alert('Você saiu da sua conta com sucesso.');
+        }
+    } else {
+        mensagemErroLogin.style.display = 'none';
+        modalLogin.classList.add('ativo');
+        overlayLogin.classList.add('ativo');
+    }
 });
 
 function fecharLoginModal() {
@@ -326,7 +338,7 @@ function atualizarCarrinho() {
     totalValor.innerText = `R$ ${totalFinal.toFixed(2).replace('.', ',')}`;
 }
 
-// CHECKOUT E SALVAMENTO NO FIRESTORE (FIREBASE)
+// CHECKOUT, SALVAMENTO NO FIRESTORE E INTEGRAÇÃO WHATSAPP
 const clientePagamento = document.getElementById('clientePagamento');
 const containerPix = document.getElementById('containerPix');
 const containerCartao = document.getElementById('containerCartao');
@@ -363,6 +375,7 @@ const chatMensagens = document.getElementById('chatMensagens');
 const numeroPedidoChat = document.getElementById('numeroPedidoChat');
 const inputChatCliente = document.getElementById('inputChatCliente');
 const enviarMsgChatBtn = document.getElementById('enviarMsgChatBtn');
+const btnFlutuanteChat = document.getElementById('btnFlutuanteChat');
 
 function adicionarMensagemChat(texto, remetente) {
     const div = document.createElement('div');
@@ -399,10 +412,12 @@ formPedido.addEventListener('submit', async function(e) {
     let itensDoPedido = [...carrinho];
     let subtotal = 0;
     let resumoItens = '';
+    let resumoItensTextoZap = '';
     
     carrinho.forEach(item => {
         const descExtras = item.extras ? ` (${item.extras})` : '';
         resumoItens += `• ${item.quantidade}x ${item.nome}${descExtras}<br>`;
+        resumoItensTextoZap += `• ${item.quantidade}x ${item.nome}${descExtras}\n`;
         subtotal += item.preco * item.quantidade;
     });
     const total = subtotal + TAXA_ENTREGA;
@@ -424,7 +439,7 @@ formPedido.addEventListener('submit', async function(e) {
         dataFormatada: new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})
     };
 
-    // Salvar no Firebase Firestore em nuvem
+    // 1. Salvar no Firebase Firestore em nuvem
     try {
         await addDoc(collection(db, "pedidos"), dadosDoPedido);
         console.log("Pedido salvo no Firestore com sucesso!");
@@ -432,7 +447,7 @@ formPedido.addEventListener('submit', async function(e) {
         console.error("Erro ao salvar pedido no Firebase: ", erro);
     }
 
-    // Salvar também localmente para o histórico rápido do usuário
+    // 2. Salvar também localmente para o histórico rápido do usuário
     salvarPedidoNoHistorico(usuarioLogado, {
         id: numPedido,
         data: dadosDoPedido.dataFormatada,
@@ -460,8 +475,26 @@ formPedido.addEventListener('submit', async function(e) {
         );
     }, 1000);
 
+    // 3. Montar link do WhatsApp para a loja com o número oficial (+55 64 99330-1938)
+    const numeroWhatsAppDaLoja = "5564993301938"; 
+    const textoWhatsApp = `*NOVO PEDIDO #${numPedido}* 🍔🔥\n\n` +
+        `*Cliente:* ${nome}\n` +
+        `*Telefone:* ${telefone}\n\n` +
+        `*Itens:*\n${resumoItensTextoZap}\n` +
+        `*Endereço:* ${rua}, Nº ${numero} - ${bairro}\n` +
+        `*Pagamento:* ${pagamento}\n` +
+        `*Taxa de Entrega:* R$ 5,00\n` +
+        `*VALOR TOTAL:* *R$ ${total.toFixed(2).replace('.', ',')}*\n` +
+        `*Observações:* ${obs}`;
+
+    const urlWhatsApp = `https://wa.me/${numeroWhatsAppDaLoja}?text=${encodeURIComponent(textoWhatsApp)}`;
+
     setTimeout(() => {
-        adicionarMensagemChat(`Seu pedido já entrou em preparo! O tempo estimado de entrega é de <strong>35 a 45 minutos</strong>.`, 'atendente');
+        adicionarMensagemChat(
+            `Seu pedido já entrou em preparo! O tempo estimado de entrega é de <strong>35 a 45 minutos</strong>.<br><br>` +
+            `<a href="${urlWhatsApp}" target="_blank" style="display: inline-block; padding: 10px 15px; background-color: #25D366; color: #fff; border-radius: 5px; text-decoration: none; font-weight: bold;">📱 Falar sobre o pedido no WhatsApp</a>`,
+            'atendente'
+        );
     }, 2200);
 
     carrinho = [];
@@ -536,16 +569,13 @@ function repetirPedido(indexPedido) {
     abrirCarrinho();
 }
 
+// APENAS ADICIONA A MENSAGEM DO CLIENTE NO CHAT (SEM RESPOSTA AUTOMÁTICA)
 function enviarMensagemCliente() {
     const texto = inputChatCliente.value.trim();
     if (!texto) return;
 
     adicionarMensagemChat(texto, 'cliente');
     inputChatCliente.value = '';
-
-    setTimeout(() => {
-        adicionarMensagemChat('Anotado! Já repassei essa informação para a equipe da cozinha/entrega. 👍', 'atendente');
-    }, 1200);
 }
 
 enviarMsgChatBtn.addEventListener('click', enviarMensagemCliente);
@@ -556,6 +586,13 @@ inputChatCliente.addEventListener('keypress', function(e) {
 fecharChatBtn.addEventListener('click', () => {
     modalChat.classList.remove('ativo');
 });
+
+// ABRIR O CHAT AO CLICAR NO BOTÃO FLUTUANTE DO CANTO INFERIOR DIREITO
+if (btnFlutuanteChat) {
+    btnFlutuanteChat.addEventListener('click', () => {
+        modalChat.classList.add('ativo');
+    });
+}
 
 // ZOOM NAS IMAGENS
 const overlayZoom = document.getElementById('overlayZoom');
