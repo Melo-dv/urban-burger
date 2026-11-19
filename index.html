@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URBAN BURGER | Delivery Oficial</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- CABEÇALHO -->
+    <header class="cabecalho">
+        <div class="logo">
+            URBAN<span>BURGER.</span>
+        </div>
+        <nav class="navegacao">
+            <a href="#inicio">Início</a>
+            <a href="#cardapio">Cardápio</a>
+            <a href="#combos">Combos</a>
+            <a href="#porcoes">Porções</a>
+            <a href="#bebidas">Bebidas</a>
+            <a href="#historia">Nossa História</a>
+            <a href="#contato">Contato</a>
+        </nav>
+        <div class="cabecalho-botoes">
+            <button id="abrirLoginBtn" class="botao-login">Entrar / Cadastrar</button>
+            <button id="abrirCarrinhoBtn" class="botao-menu">
+                Carrinho (<span id="contadorCarrinho">0</span>)
+            </button>
+            <button id="abrirHistoricoBtn" class="botao-historico" style="display: none;">Histórico</button>
+        </div>
+    </header>
+
+    <!-- 01. INÍCIO (HERO) -->
+    <section class="inicio" id="inicio">
+        <div class="inicio-conteudo">
+            <span class="etiqueta">HAMBÚRGUER ARTESANAL</span>
+            <h1> O sabor que<br> domina a <span>cidade.</span> </h1>
+            <p> Monte seu pedido online com entrega rápida e acompanhamento em tempo real. </p>
+            <a href="#cardapio" class="botao-principal"> Fazer pedido agora </a>
+        </div>
+    </section>
+
+    <!-- 02. CARDÁPIO (Hambúrgueres) -->
+    <section class="cardapio" id="cardapio">
+        <div class="titulo-secao">
+            <span>ESCOLHA O SEU FAVORITO</span>
+            <h2>Nosso cardápio</h2>
+            <p> Clique em adicionar para customizar seus ingredientes e levar ao carrinho. </p>
+        </div>
+
+        <div class="produtos">
+            <div class="produto">
+                <div class="produto-imagem">
+                    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80" alt="Urban Classic">
+                    <span>01</span>
+                </div>
+                <div class="produto-info">
+                    <h3>Urban Classic</h3>
+                    <p> Hambúrguer artesanal 160g, queijo cheddar, alface, tomate e molho especial da casa. </p>
+                    <strong>R$ 29,90</strong>
+                    <button class="botao-produto" data-nome="Urban Classic" data-preco="29.90"> + Adicionar ao carrinho </button>
+                </div>
+            </div>
+
+            <div class="produto">
+                <div class="produto-imagem">
+                    <img src="https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=600&q=80" alt="Downtown Bacon">
+                    <span>02</span>
+                </div>
+                <div class="produto-info">
+                    <h3>Downtown Bacon</h3>
+                    <p> Hambúrguer artesanal 160g, cheddar cremoso, cebola caramelizada e bacon crocante. </p>
+                    <strong>R$ 34,90</strong>
+                    <button class="botao-produto" data-nome="Downtown Bacon" data-preco="34.90"> + Adicionar ao carrinho </button>
+                </div>
+            </div>
+
+            <div class="produto">
+                <div class="produto-imagem">
+                    <img src="https://images.unsplash.com/photo-1615297928064-24977384d0da?w=600&q=80" alt="Crispy Chicken">
+                    <span>03</span>
+                </div>
+                <div class="produto-info">
+                    <h3>Crispy Chicken</h3>
+                    <p> Frango empanado super crocante, queijo prato, alface americana e molho especial. </p>
+                    <strong>R$ 27,90</strong>
+                    <button class="botao-produto" data-nome="Crispy Chicken" data-preco="27.90"> + Adicionar ao carrinho </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 03. COMBOS -->
+    <section class="combos" id="combos">
+        <div class="titulo-secao">
+            <span>EXPERIÊNCIA COMPLETA</span>
+            <h2>Combos Especiais</h2>
+            <p> A combinação perfeita de burger, acompanhamento e bebida. </p>
+        </div>
+
+        <div class="produtos">
+            <div class="produto">
+                <div class="produto-imagem">
+                    <img src="images/combo_street_completo.jpg" alt="Combo Street">
+                    <span>COMBO</span>
+                </div>
+                <div class="produto-info">
+                    <h3>Combo Street</h3>
+                    <p> 1 Urban Classic + Porção Individual + Refrigerante Mini (350ml). </p>
+                    <strong>R$ 39,90</strong>
+                    <button class="botao-produto" data-nome="Combo Street" data-preco="39.90"> + Adicionar ao carrinho </button>
+                </div>
+            </div>
+
+            <div class="produto">
+                <div class="produto-imagem">
+                    <img src="images/combo_heavy_bacon_completo.jpg" alt="Combo Heavy Bacon">
+                    <span>COMBO</span>
+                </div>
+                <div class="produto-info">
+                    <h3>Combo Heavy Bacon</h3>
+                    <p> 1 Downtown Bacon + Porção com Cheddar e Bacon + Refrigerante Lata (350ml). </p>
+                    <strong>R$ 46,90</strong>
+                    <button class="botao-produto" data-nome="Combo Heavy Bacon" data-preco="46.90"> + Adicionar ao carrinho </button>
+                </div>
+            </div>
+
+            <div class="produto">
+                <div class="produto-imagem">
+                    <img src="images/combo_duplo_urbano_completo.jpg" alt="Combo Duplo Urbano">
+                    <span>COMBO</span>
+                </div>
+                <div class="produto-info">
+                    <h3>Combo Duplo Urbano</h3>
+                    <p> 2 Urban Classic + Porção Grande + Refrigerante 1L. </p>
+                    <strong>R$ 68,90</strong>
+                    <button class="botao-produto" data-nome="Combo Duplo Urbano" data-preco="68.90"> + Adicionar ao carrinho </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04. PORÇÕES -->
+    <section class="cardapio" id="porcoes">
+        <div class="titulo-secao">
+            <span>PARA ACOMPANHAR OU COMPARTILHAR</span>
+            <h2>Porções</h2>
+            <p> Batatas crocantes e petiscos irresistíveis. </p>
+        </div>
+
+        <div class="produtos">
+            <div class="produto">
+                <div class="produto-imagem">
+                    <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&q=80" alt="Batata Rústica">
+                    <span>PORÇÃO</span>
+                </div>
+                <div class="produto-info">
+                    <h3>Batata Rústica</h3>
+                    <p> Batatas rústicas temperadas com alecrim e páprica, acompanhadas de molho da casa. </p>
+                    <strong>R$ 22,90</strong>
+                    <button class="botao-produto" data-nome="Batata Rústica" data-preco="22.90"> + Adicionar ao carrinho </button>
+                </div>
+            </div>
+
+            <div class="produto">
+                <div class="produto-imagem">
+                    <img src="https://images.unsplash.com/photo-1639024471283-03518883512d?w=600&q=80" alt="Batata com Cheddar e Bacon">
+                    <span>PORÇÃO</span>
+                </div>
+                <div class="produto-info">
+                    <h3>Batata Cheddar & Bacon</h3>
+                    <p> Porção generosa de fritas coberta com muito cheddar cremoso e bacon crocante em cubos. </p>
+                    <strong>R$ 29,90</strong>
+                    <button class="botao-produto" data-nome="Batata Cheddar & Bacon" data-preco="29.90"> + Adicionar ao carrinho </button>
+                </div>
+            </div>
+
+            <div class="produto">
+                <div class="produto-imagem">
+                    <img src="https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=600&q=80" alt="Onion Rings">
+                    <span>PORÇÃO</span>
+                </div>
+                <div class="produto-info">
+                    <h3>Onion Rings</h3>
+                    <p> Anéis de cebola empanados super crocantes, servidos com molho barbecue artesanal. </p>
+                    <strong>R$ 24,90</strong>
+                    <button class="botao-produto" data-nome="Onion Rings" data-preco="24.90"> + Adicionar ao carrinho </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 05. BEBIDAS -->
+    <section class="combos" id="bebidas">
+        <div class="titulo-secao">
+            <span>SE REFRIGERAR</span>
+            <h2>Bebidas</h2>
+            <p> Refrigerantes gelados, chás e sucos naturais. </p>
+        </div>
+
+        <div class="produtos">
+            <div class="produto">
+                <div class="produto-imagem">
+                    <img src="images/Coca-cola.jpg" alt="Coca-Cola Lata 350ml">
+                    <span>BEBIDA</span>
+                </div>
+                <div class="produto-info">
+                    <h3>Coca-Cola Lata 350ml</h3>
+                    <p> Geladinha, perfeita para acompanhar seu burger. </p>
+                    <strong>R$ 6,50</strong>
+                    <button class="botao-produto" data-nome="Coca-Cola Lata 350ml" data-preco="6.50"> + Adicionar ao carrinho </button>
+                </div>
+            </div>
+
+            <div class="produto">
+                <div class="produto-imagem">
+                    <img src="images/Guarana.jpg" alt="Guaraná Antarctica Lata 350ml">
+                    <span>BEBIDA</span>
+                </div>
+                <div class="produto-info">
+                    <h3>Guaraná Antarctica Lata 350ml</h3>
+                    <p> O sabor original do Brasil. </p>
+                    <strong>R$ 6,00</strong>
+                    <button class="botao-produto" data-nome="Guaraná Antarctica Lata 350ml" data-preco="6.00"> + Adicionar ao carrinho </button>
+                </div>
+            </div>
+
+            <div class="produto">
+                <div class="produto-imagem">
+                    <img src="images/Suco de laranja.jpg" alt="Suco Natural de Laranja 500ml">
+                    <span>BEBIDA</span>
+                </div>
+                <div class="produto-info">
+                    <h3>Suco Natural de Laranja 500ml</h3>
+                    <p> Feito na hora com frutas frescas. </p>
+                    <strong>R$ 9,90</strong>
+                    <button class="botao-produto" data-nome="Suco Natural de Laranja 500ml" data-preco="9.90"> + Adicionar ao carrinho </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 06. NOSSA HISTÓRIA -->
+    <section class="historia" id="historia">
+        <div class="historia-conteudo">
+            <span class="etiqueta">SOBRE A MARCA</span>
+            <h2>Nascemos nas ruas para redefinir o hambúrguer artesanal.</h2>
+            <p>
+                A <strong>URBAN BURGER</strong> surgiu com um propósito direto: unir ingredientes selecionados, carne fresca moída diariamente e a energia vibrante da cidade.
+            </p>
+        </div>
+    </section>
+
+    <!-- 07. LOCALIZAÇÃO E CONTATO -->
+    <section class="contato" id="contato">
+        <div class="titulo-secao">
+            <span>VENHA NOS VISITAR OU PEÇA EM CASA</span>
+            <h2>Localização e Contato</h2>
+        </div>
+
+        <div class="contato-grid">
+            <div class="contato-card">
+                <h3>Endereço</h3>
+                <p>Av. Paulista, 1000 — Centro Urbano<br>São Paulo - SP</p>
+            </div>
+            <div class="contato-card">
+                <h3>Horário de Funcionamento</h3>
+                <p>Terça a Domingo: 18h00 às 23h30<br>Segunda: Fechado</p>
+            </div>
+            <div class="contato-card">
+                <h3>Taxa de Entrega</h3>
+                <p>Taxa fixa urbana: R$ 5,00<br>Tempo médio: 30 a 45 min</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- RODAPÉ -->
+    <footer class="rodape">
+        <div class="logo">
+            URBAN<span>BURGER.</span>
+        </div>
+        <p>O sabor que domina a cidade.</p>
+        <span class="direitos"> © 2026 URBAN BURGER. Sistema de Delivery Demonstrativo. </span>
+    </footer>
+
+    <!-- GAVETA LATERAL DO HISTÓRICO DE PEDIDOS -->
+    <aside id="gavetaHistorico" class="gaveta-carrinho">
+        <div class="gaveta-topo">
+            <h3>Histórico de Compras</h3>
+            <button id="fecharHistoricoBtn" class="btn-fechar">&times;</button>
+        </div>
+        <div id="listaHistoricoLateral" class="lista-itens">
+            <!-- Os pedidos aparecem aqui -->
+        </div>
+    </aside>
+
+    <!-- MODAL DE LOGIN / CADASTRO -->
+    <div id="overlayLogin" class="overlay"></div>
+    <div id="modalLogin" class="modal-login">
+        <div class="modal-topo">
+            <h3 id="tituloModalLogin">Entrar na sua Conta</h3>
+            <button id="fecharLoginBtn" class="btn-fechar">&times;</button>
+        </div>
+        <div class="modal-corpo">
+            <form id="formLogin">
+                <input type="email" id="loginEmail" placeholder="Seu e-mail (Gmail)" required>
+                <input type="password" id="loginSenha" placeholder="Sua senha" required>
+                <p id="mensagemErroLogin" class="mensagem-erro-login"></p>
+                <button type="submit" class="botao-finalizar">Entrar</button>
+            </form>
+            <p class="trocar-auth">Ainda não tem conta? <a href="#" id="linkCadastrar">Cadastre-se</a></p>
+        </div>
+    </div>
+
+    <!-- MODAL DE CUSTOMIZAÇÃO DE INGREDIENTES -->
+    <div id="overlayIngredientes" class="overlay"></div>
+    <div id="modalIngredientes" class="modal-ingredientes">
+        <div class="modal-topo">
+            <h3 id="modalProdutoNome">Customizar Lanche</h3>
+            <button id="fecharModalIngredientes" class="btn-fechar">&times;</button>
+        </div>
+        <div class="modal-corpo">
+            <p class="modal-subtitulo">Escolha os ingredientes adicionais:</p>
+            
+            <div class="lista-opcionais-qtd">
+                <div class="linha-opcional">
+                    <div class="opcional-info">
+                        <strong>Bacon Crocante</strong>
+                        <span>+ R$ 5,00</span>
+                    </div>
+                    <div class="contador-ingrediente">
+                        <button type="button" onclick="mudarExtra('bacon', -1)">-</button>
+                        <span id="qtd-bacon">0</span>
+                        <button type="button" onclick="mudarExtra('bacon', 1)">+</button>
+                    </div>
+                </div>
+
+                <div class="linha-opcional">
+                    <div class="opcional-info">
+                        <strong>Cheddar Extra</strong>
+                        <span>+ R$ 4,00</span>
+                    </div>
+                    <div class="contador-ingrediente">
+                        <button type="button" onclick="mudarExtra('cheddar', -1)">-</button>
+                        <span id="qtd-cheddar">0</span>
+                        <button type="button" onclick="mudarExtra('cheddar', 1)">+</button>
+                    </div>
+                </div>
+
+                <div class="linha-opcional">
+                    <div class="opcional-info">
+                        <strong>Cebola Caramelizada</strong>
+                        <span>+ R$ 3,00</span>
+                    </div>
+                    <div class="contador-ingrediente">
+                        <button type="button" onclick="mudarExtra('cebola', -1)">-</button>
+                        <span id="qtd-cebola">0</span>
+                        <button type="button" onclick="mudarExtra('cebola', 1)">+</button>
+                    </div>
+                </div>
+
+                <div class="linha-opcional">
+                    <div class="opcional-info">
+                        <strong>Ovo</strong>
+                        <span>+ R$ 3,00</span>
+                    </div>
+                    <div class="contador-ingrediente">
+                        <button type="button" onclick="mudarExtra('ovo', -1)">-</button>
+                        <span id="qtd-ovo">0</span>
+                        <button type="button" onclick="mudarExtra('ovo', 1)">+</button>
+                    </div>
+                </div>
+
+                <div class="linha-opcional">
+                    <div class="opcional-info">
+                        <strong>Carne 160g Extra</strong>
+                        <span>+ R$ 10,00</span>
+                    </div>
+                    <div class="contador-ingrediente">
+                        <button type="button" onclick="mudarExtra('carne', -1)">-</button>
+                        <span id="qtd-carne">0</span>
+                        <button type="button" onclick="mudarExtra('carne', 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-rodape">
+            <button id="confirmarAdicaoBtn" class="botao-finalizar">Adicionar ao Carrinho</button>
+        </div>
+    </div>
+
+    <!-- GAVETA LATERAL DO CARRINHO E CHECKOUT -->
+    <div id="overlayCarrinho" class="overlay"></div>
+    <aside id="gavetaCarrinho" class="gaveta-carrinho">
+        <div class="gaveta-topo">
+            <h3>Seu Pedido</h3>
+            <button id="fecharCarrinhoBtn" class="btn-fechar">&times;</button>
+        </div>
+
+        <div id="listaItensCarrinho" class="lista-itens">
+            <p class="carrinho-vazio">Seu carrinho está vazio.</p>
+        </div>
+
+        <div class="resumo-valores">
+            <div class="linha-valor">
+                <span>Subtotal:</span>
+                <span id="subtotalValor">R$ 0,00</span>
+            </div>
+            <div class="linha-valor">
+                <span>Taxa de entrega:</span>
+                <span>R$ 5,00</span>
+            </div>
+            <div class="linha-valor total">
+                <span>Total:</span>
+                <span id="totalValor">R$ 5,00</span>
+            </div>
+        </div>
+
+        <form id="formPedido" class="form-entrega">
+            <h4>Dados para Entrega</h4>
+            
+            <input type="text" id="clienteNome" placeholder="Seu nome completo" required>
+            <input type="tel" id="clienteTelefone" placeholder="Seu WhatsApp (Ex: 11 99999-9999)" required>
+            
+            <div class="linha-dupla">
+                <input type="text" id="clienteRua" placeholder="Rua / Avenida" required>
+                <input type="text" id="clienteNumero" placeholder="Nº" class="input-pequeno" required>
+            </div>
+            
+            <input type="text" id="clienteBairro" placeholder="Bairro / Ponto de referência" required>
+            
+            <select id="clientePagamento" required>
+                <option value="">Forma de pagamento...</option>
+                <optgroup label="Pagamento via Site">
+                    <option value="Pix (Online)">Pix (Online)</option>
+                    <option value="Cartão de Crédito (Online)">Cartão de Crédito (Online)</option>
+                </optgroup>
+                <optgroup label="Pagamento na Entrega">
+                    <option value="Pix (Na Entrega)">Pix (Na Entrega)</option>
+                    <option value="Dinheiro (Na Entrega)">Dinheiro (Na Entrega)</option>
+                    <option value="Cartão de Débito (Na Entrega)">Cartão de Débito (Na Entrega)</option>
+                    <option value="Cartão de Crédito (Na Entrega)">Cartão de Crédito (Na Entrega)</option>
+                </optgroup>
+            </select>
+
+            <div id="containerPix" class="container-pagamento-dinamico" style="display: none;">
+                <div class="box-pix">
+                    <p><strong>Escaneie o QR Code ou copie a chave Pix:</strong></p>
+                    <div class="qr-code-fake">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=URBAN_BURGER_PIX_EXEMPLO" alt="QR Code Pix">
+                    </div>
+                    <input type="text" value="00020126580014br.gov.pix0136urban-burger-pagamento-pix-123" readonly id="chavePixTexto">
+                    <button type="button" id="btnCopiarPix" class="botao-copiar">Copiar Chave Pix</button>
+                </div>
+            </div>
+
+            <div id="containerCartao" class="container-pagamento-dinamico" style="display: none;">
+                <div class="box-cartao">
+                    <p><strong>Informações do Cartão de Crédito:</strong></p>
+                    <input type="text" id="cartaoNumero" placeholder="Número do Cartão (0000 0000 0000 0000)">
+                    <input type="text" id="cartaoNome" placeholder="Nome impresso no cartão">
+                    <div class="linha-dupla">
+                        <input type="text" id="cartaoValidade" placeholder="MM/AA">
+                        <input type="text" id="cartaoCvv" placeholder="CVV">
+                    </div>
+                </div>
+            </div>
+
+            <textarea id="clienteObs" rows="2" placeholder="Observações (Ex: troco para 50, retirar cebola...)"></textarea>
+
+            <button type="submit" class="botao-finalizar">Finalizar Pedido Agora</button>
+        </form>
+    </aside>
+
+    <!-- CHAT AUTOMÁTICO DO ATENDENTE -->
+    <div id="modalChat" class="modal-chat">
+        <div class="chat-box">
+            <div class="chat-header">
+                <div class="atendente-info">
+                    <div class="status-online"></div>
+                    <div>
+                        <h4>Atendimento Urban Burger</h4>
+                        <span>Online agora • Pedido #<span id="numeroPedidoChat"></span></span>
+                    </div>
+                </div>
+                <button id="fecharChatBtn" class="btn-fechar">&times;</button>
+            </div>
+            <div id="chatMensagens" class="chat-mensagens"></div>
+            <div class="chat-input-area">
+                <input type="text" id="inputChatCliente" placeholder="Digite uma dúvida ou mensagem...">
+                <button id="enviarMsgChatBtn">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ZOOM DA IMAGEM -->
+    <div id="overlayZoom" class="overlay-zoom">
+        <span id="fecharZoom" class="btn-fechar-zoom">&times;</span>
+        <img id="imagemZoom" src="" alt="Zoom do Produto">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
