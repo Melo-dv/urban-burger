@@ -569,13 +569,28 @@ function repetirPedido(indexPedido) {
     abrirCarrinho();
 }
 
-// APENAS ADICIONA A MENSAGEM DO CLIENTE NO CHAT (SEM RESPOSTA AUTOMÁTICA)
+// ATENDENTE VIRTUAL NO CHAT (Responde quando o cliente digita qualquer mensagem)
 function enviarMensagemCliente() {
     const texto = inputChatCliente.value.trim();
     if (!texto) return;
 
+    // 1. Adiciona a mensagem do cliente
     adicionarMensagemChat(texto, 'cliente');
     inputChatCliente.value = '';
+
+    // 2. Número do WhatsApp da loja
+    const numeroWhatsAppDaLoja = "5564993301938"; 
+    const linkWhatsApp = `https://wa.me/${numeroWhatsAppDaLoja}?text=${encodeURIComponent('Olá! Gostaria de tirar uma dúvida sobre a Urban Burger.')}`;
+
+    // 3. Resposta automática com o botão do WhatsApp
+    setTimeout(() => {
+        adicionarMensagemChat(
+            `Anotado! Já repassei a sua mensagem para a nossa equipe. 👍<br><br>` +
+            `Se preferir tirar dúvidas rapidamente ou conversar em tempo real com a nossa equipe, clique no botão abaixo:` +
+            `<br><br><a href="${linkWhatsApp}" target="_blank" style="display: inline-block; padding: 10px 15px; background-color: #25D366; color: #fff; border-radius: 6px; text-decoration: none; font-weight: bold; text-align: center;">📱 Tirar dúvidas no WhatsApp</a>`,
+            'atendente'
+        );
+    }, 1000);
 }
 
 enviarMsgChatBtn.addEventListener('click', enviarMensagemCliente);
@@ -590,6 +605,9 @@ fecharChatBtn.addEventListener('click', () => {
 // ABRIR O CHAT AO CLICAR NO BOTÃO FLUTUANTE DO CANTO INFERIOR DIREITO
 if (btnFlutuanteChat) {
     btnFlutuanteChat.addEventListener('click', () => {
+        if (chatMensagens.children.length === 0) {
+            adicionarMensagemChat(`Olá! Seja bem-vindo à <strong>URBAN BURGER</strong> 🍔🔥. Como podemos te ajudar hoje?`, 'atendente');
+        }
         modalChat.classList.add('ativo');
     });
 }
