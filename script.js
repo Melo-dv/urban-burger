@@ -1,3 +1,22 @@
+// Importar o Firebase e o Firestore direto dos CDNs oficiais
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+// Sua configuração do Firebase obtida no console
+const firebaseConfig = {
+  apiKey: "AIzaSyApX3wZRaf0P2J2W7ZXMuHxfcS3nVqv2qA",
+  authDomain: "urban-burger-delivery.firebaseapp.com",
+  projectId: "urban-burger-delivery",
+  storageBucket: "urban-burger-delivery.firebasestorage.app",
+  messagingSenderId: "603754288588",
+  appId: "1:603754288588:web:73beb98886ce08e2897969",
+  measurementId: "G-WTGKXX2FWT"
+};
+
+// Inicializar o Firebase e o Firestore
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 let carrinho = [];
 const TAXA_ENTREGA = 5.00;
 let produtoSelecionadoTemp = null;
@@ -307,7 +326,7 @@ function atualizarCarrinho() {
     totalValor.innerText = `R$ ${totalFinal.toFixed(2).replace('.', ',')}`;
 }
 
-// CHECKOUT E SALVAMENTO NO HISTÓRICO LATERAL
+// CHECKOUT E SALVAMENTO NO FIRESTORE (FIREBASE)
 const clientePagamento = document.getElementById('clientePagamento');
 const containerPix = document.getElementById('containerPix');
 const containerCartao = document.getElementById('containerCartao');
@@ -353,7 +372,7 @@ function adicionarMensagemChat(texto, remetente) {
     chatMensagens.scrollTop = chatMensagens.scrollHeight;
 }
 
-formPedido.addEventListener('submit', function(e) {
+formPedido.addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const usuarioLogado = localStorage.getItem('urban_burger_logado');
@@ -387,16 +406,41 @@ formPedido.addEventListener('submit', function(e) {
         subtotal += item.preco * item.quantidade;
     });
     const total = subtotal + TAXA_ENTREGA;
+    const numPedido = Math.floor(1000 + Math.random() * 9000);
 
+    const dadosDoPedido = {
+        id: numPedido,
+        clienteEmail: usuarioLogado,
+        nomeCliente: nome,
+        telefone: telefone,
+        endereco: `${rua}, Nº ${numero} - ${bairro}`,
+        itens: itensDoPedido,
+        subtotal: subtotal,
+        taxaEntrega: TAXA_ENTREGA,
+        total: total,
+        pagamento: pagamento,
+        observacao: obs,
+        data: new Date().toISOString(),
+        dataFormatada: new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})
+    };
+
+    // Salvar no Firebase Firestore em nuvem
+    try {
+        await addDoc(collection(db, "pedidos"), dadosDoPedido);
+        console.log("Pedido salvo no Firestore com sucesso!");
+    } catch (erro) {
+        console.error("Erro ao salvar pedido no Firebase: ", erro);
+    }
+
+    // Salvar também localmente para o histórico rápido do usuário
     salvarPedidoNoHistorico(usuarioLogado, {
-        id: Math.floor(1000 + Math.random() * 9000),
-        data: new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}),
+        id: numPedido,
+        data: dadosDoPedido.dataFormatada,
         itens: itensDoPedido,
         total: total,
         pagamento: pagamento
     });
 
-    const numPedido = Math.floor(1000 + Math.random() * 9000);
     numeroPedidoChat.innerText = numPedido;
 
     fecharCarrinho();
