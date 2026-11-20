@@ -2,15 +2,14 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-// Sua configuração do Firebase obtida no console
+// Sua nova configuração correta do Firebase (urban-burger-oficial)
 const firebaseConfig = {
-  apiKey: "AIzaSyApX3wZRaf0P2J2W7ZXMuHxfcS3nVqv2qA",
-  authDomain: "urban-burger-delivery.firebaseapp.com",
-  projectId: "urban-burger-delivery",
-  storageBucket: "urban-burger-delivery.firebasestorage.app",
-  messagingSenderId: "603754288588",
-  appId: "1:603754288588:web:73beb98886ce08e2897969",
-  measurementId: "G-WTGKXX2FWT"
+  apiKey: "AIzaSyAPcL9Zyw69MMdH7tVpQWl8cgpHMmEIZ40",
+  authDomain: "urban-burger-oficial.firebaseapp.com",
+  projectId: "urban-burger-oficial",
+  storageBucket: "urban-burger-oficial.firebasestorage.app",
+  messagingSenderId: "68399583725",
+  appId: "1:68399583725:web:d271f512225c00a87117e4"
 };
 
 // Inicializar o Firebase e o Firestore
@@ -250,7 +249,7 @@ function fecharModal() {
 
 fecharModalIngredientes.addEventListener('click', fecharModal);
 
-function mudarExtra(tipo, delta) {
+window.mudarExtra = function(tipo, delta) {
     let atual = contagemExtras[tipo] + delta;
     if (atual >= 0 && atual <= 10) {
         contagemExtras[tipo] = atual;
@@ -291,7 +290,7 @@ confirmarAdicaoBtn.addEventListener('click', function() {
     abrirCarrinho();
 });
 
-function alterarQuantidade(index, delta) {
+window.alterarQuantidade = function(index, delta) {
     carrinho[index].quantidade += delta;
     if (carrinho[index].quantidade <= 0) {
         carrinho.splice(index, 1);
@@ -547,7 +546,7 @@ function carregarHistoricoLateral(email) {
     });
 }
 
-function repetirPedido(indexPedido) {
+window.repetirPedido = function(indexPedido) {
     const usuarioLogado = localStorage.getItem('urban_burger_logado');
     let historicosGerais = JSON.parse(localStorage.getItem('urban_burger_historico')) || {};
     let pedidosDoUsuario = historicosGerais[usuarioLogado] || [];
@@ -569,20 +568,17 @@ function repetirPedido(indexPedido) {
     abrirCarrinho();
 }
 
-// ATENDENTE VIRTUAL NO CHAT (Responde quando o cliente digita qualquer mensagem)
+// ATENDENTE VIRTUAL NO CHAT
 function enviarMensagemCliente() {
     const texto = inputChatCliente.value.trim();
     if (!texto) return;
 
-    // 1. Adiciona a mensagem do cliente
     adicionarMensagemChat(texto, 'cliente');
     inputChatCliente.value = '';
 
-    // 2. Número do WhatsApp da loja
     const numeroWhatsAppDaLoja = "5564993301938"; 
     const linkWhatsApp = `https://wa.me/${numeroWhatsAppDaLoja}?text=${encodeURIComponent('Olá! Gostaria de tirar uma dúvida sobre a Urban Burger.')}`;
 
-    // 3. Resposta automática com o botão do WhatsApp
     setTimeout(() => {
         adicionarMensagemChat(
             `Anotado! Já repassei a sua mensagem para a nossa equipe. 👍<br><br>` +
@@ -602,7 +598,7 @@ fecharChatBtn.addEventListener('click', () => {
     modalChat.classList.remove('ativo');
 });
 
-// ABRIR O CHAT AO CLICAR NO BOTÃO FLUTUANTE DO CANTO INFERIOR DIREITO
+// ABRIR O CHAT AO CLICAR NO BOTÃO FLUTUANTE
 if (btnFlutuanteChat) {
     btnFlutuanteChat.addEventListener('click', () => {
         if (chatMensagens.children.length === 0) {

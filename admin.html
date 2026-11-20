@@ -38,14 +38,41 @@
             align-items: center;
             flex-wrap: wrap;
         }
-        .input-data {
+        .input-data, .input-financeiro {
             background-color: #1e1e1e;
             color: #fff;
             border: 1px solid #444;
             padding: 10px;
             border-radius: 5px;
             font-size: 14px;
-            cursor: pointer;
+        }
+        .secao-financeira {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .secao-financeira h3 {
+            margin: 0 0 5px 0;
+            color: #25D366;
+            font-size: 16px;
+        }
+        .secao-financeira p {
+            margin: 0;
+            font-size: 13px;
+            color: #aaa;
+        }
+        .config-gateway {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
         }
         .btn-acao {
             background-color: #ff9800;
@@ -66,6 +93,20 @@
         }
         .btn-apagar:hover {
             background-color: #b71c1c;
+        }
+        .btn-sacar {
+            background-color: #25D366;
+            color: #fff;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 16px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .btn-sacar:hover {
+            background-color: #1ebe5d;
         }
         .grid-pedidos {
             display: grid;
@@ -131,6 +172,19 @@
             </div>
         </div>
 
+        <!-- Seção de Configuração Financeira (Onde o lojista insere a chave dele e gerencia saques) -->
+        <div class="secao-financeira">
+            <div>
+                <h3>💳 Configuração de Recebimento (Cartão / Pix)</h3>
+                <p>Insira a chave de API/Token do Mercado Pago da loja para o dinheiro cair direto na conta deles.</p>
+            </div>
+            <div class="config-gateway">
+                <input type="password" id="inputTokenGateway" class="input-financeiro" placeholder="Cole o Access Token aqui...">
+                <button class="btn-acao" id="btnSalvarToken">Salvar Chave</button>
+                <a href="https://www.mercadopago.com.br/hub/login" target="_blank" class="btn-sacar">🏦 Acessar Saques / Extrato</a>
+            </div>
+        </div>
+
         <div id="listaPedidosAdmin" class="grid-pedidos">
             <p class="sem-pedidos">Selecione uma data para carregar os pedidos.</p>
         </div>
@@ -141,18 +195,32 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
         import { getFirestore, collection, getDocs, query, where, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
+        // Nova configuração do Firebase (urban-burger-oficial)
         const firebaseConfig = {
-          apiKey: "AIzaSyApX3wZRaf0P2J2W7ZXMuHxfcS3nVqv2qA",
-          authDomain: "urban-burger-delivery.firebaseapp.com",
-          projectId: "urban-burger-delivery",
-          storageBucket: "urban-burger-delivery.firebasestorage.app",
-          messagingSenderId: "603754288588",
-          appId: "1:603754288588:web:73beb98886ce08e2897969",
-          measurementId: "G-WTGKXX2FWT"
+          apiKey: "AIzaSyAPcL9Zyw69MMdH7tVpQWl8cgpHMmEIZ40",
+          authDomain: "urban-burger-oficial.firebaseapp.com",
+          projectId: "urban-burger-oficial",
+          storageBucket: "urban-burger-oficial.firebasestorage.app",
+          messagingSenderId: "68399583725",
+          appId: "1:68399583725:web:d271f512225c00a87117e4"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        // Gerenciamento da chave do Gateway de Pagamento do Lojista
+        const inputTokenGateway = document.getElementById('inputTokenGateway');
+        const btnSalvarToken = document.getElementById('btnSalvarToken');
+
+        // Carrega a chave salva anteriormente (se houver)
+        const tokenSalvo = localStorage.getItem('urban_burger_gateway_token') || '';
+        inputTokenGateway.value = tokenSalvo;
+
+        btnSalvarToken.addEventListener('click', () => {
+            const token = inputTokenGateway.value.trim();
+            localStorage.setItem('urban_burger_gateway_token', token);
+            alert('Chave de pagamento configurada com sucesso para esta loja! Os repasses cairão na conta vinculada.');
+        });
 
         // Define a data atual como padrão no input ao abrir a página
         const inputData = document.getElementById('filtroData');
@@ -160,7 +228,7 @@
         inputData.value = hoje;
 
         async function carregarPedidosPorData() {
-            const dataSelecionada = inputData.value; // Formato: YYYY-MM-DD
+            const dataSelecionada = inputData.value; 
             const container = document.getElementById('listaPedidosAdmin');
             
             if (!dataSelecionada) {
@@ -171,11 +239,9 @@
             container.innerHTML = '<p class="sem-pedidos">Buscando pedidos do dia...</p>';
 
             try {
-                // Converte a data selecionada (AAAA-MM-DD) para o formato salvo no banco (DD/MM/AAAA)
                 const partes = dataSelecionada.split('-');
                 const dataFormatadaBusca = `${partes[2]}/${partes[1]}/${partes[0]}`;
 
-                // Faz a consulta no Firestore filtrando pela data formatada
                 const q = query(collection(db, "pedidos"), where("dataFormatada", ">=", dataFormatadaBusca));
                 const querySnapshot = await getDocs(q);
 
@@ -185,7 +251,6 @@
                 querySnapshot.forEach((docSnap) => {
                     const pedido = docSnap.data();
                     
-                    // Garante que pega apenas os pedidos exatamente do dia escolhido
                     if (pedido.dataFormatada && pedido.dataFormatada.startsWith(dataFormatadaBusca)) {
                         contador++;
                         let itensHtml = '';
@@ -226,7 +291,6 @@
             }
         }
 
-        // Função para apagar todos os pedidos do dia selecionado
         async function apagarPedidosDoDia() {
             const dataSelecionada = inputData.value;
             const partes = dataSelecionada.split('-');
@@ -258,11 +322,8 @@
             }
         }
 
-        // Eventos dos botões
         document.getElementById('btnFiltrar').addEventListener('click', carregarPedidosPorData);
         document.getElementById('btnApagarDia').addEventListener('click', apagarPedidosDoDia);
-
-        // Carrega automaticamente os pedidos do dia atual ao abrir a página
         document.addEventListener('DOMContentLoaded', carregarPedidosPorData);
     </script>
 </body>
